@@ -1,0 +1,36 @@
+{
+    "name": "dagasmart/official",
+    "alias": "智慧官网",
+    "description": "智慧官网",
+    "type": "library",
+    "version": "1.0.0",
+    "keywords": ["bizadmin", "extension"],
+    "homepage": "https://github.com/dagasmart/official",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Administrator",
+            "email": "sds@qq"
+        }
+    ],
+    "require": {
+        "php": ">=8.0",
+        "dagasmart/bizadmin": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "DagaSmart\\Official\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "extra": {
+        "bizadmin": "DagaSmart\\Official\\OfficialServiceProvider",
+        "laravel": {
+            "providers": [
+                "DagaSmart\\Official\\OfficialServiceProvider"
+            ]
+        }
+    }
+}
