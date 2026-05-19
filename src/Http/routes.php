@@ -10,15 +10,17 @@ use DagaSmart\BizAdmin\Middleware\Authenticate;
 
 //需登录与鉴权
 Route::group([
-    'prefix' => '', //需要时可填
+    'prefix' => 'official', //需要时可填
     'middleware' => [
         Middleware\Middleware::class,
     ],
 ], function (Router $router) {
+    $router->get('site/settings', [Controllers\SettingController::class, 'settings']);
+
     $router->get('official', [Controllers\OfficialController::class, 'index']);
 
     //resource必须放最后面
-    $router->resource('official', Controllers\OfficialController::class);
+    //$router->resource('official', Controllers\OfficialController::class);
 });
 
 //免登录无限制

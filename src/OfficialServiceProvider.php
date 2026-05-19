@@ -28,7 +28,7 @@ class OfficialServiceProvider extends ServiceProvider
         [
             'parent' => '站点管理',
             'title' => '网站设置',
-            'url' => '/official/site/setting',
+            'url' => '/official/site/settings',
             'url_type' => 1,
             'icon' => 'basil:settings-adjust-outline',
         ],
