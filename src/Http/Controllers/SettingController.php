@@ -16,9 +16,9 @@ class SettingController extends AdminController
         $logo = admin_image_url(settings()->get('site_logo', url(admin_config('admin.logo'))));
 
         return $this->response()->success([
-            'app_name' => site_settings()->get('site_name', admin_config('admin.name')),
-            'logo'     => $logo,
-            'addition_config'        => settings()->get('addition_config'),
+            'site_name' => settings()->get('site_name', '网站名称'),
+            'logo' => $logo,
+            'addition_config' => settings()->get('addition_config'),
 
         ]);
     }

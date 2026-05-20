@@ -16,6 +16,7 @@ Route::group([
     ],
 ], function (Router $router) {
     $router->get('site/settings', [Controllers\SettingController::class, 'settings']);
+    $router->get('site/menu', [Controllers\MenuController::class, 'settings']);
 
     $router->get('official', [Controllers\OfficialController::class, 'index']);
 
