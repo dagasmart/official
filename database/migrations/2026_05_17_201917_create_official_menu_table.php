@@ -26,19 +26,18 @@ return new class extends Migration
                 $table->tinyInteger('custom_order')->default(10)->comment('排序[0-255]');
                 $table->string('title', 32)->nullable()->comment('菜单名称');
                 $table->string('icon', 100)->nullable()->comment('菜单图标');
-                $table->string('url', 255)->nullable()->comment('菜单路由');
-                $table->tinyInteger('url_type')->default(1)->comment('路由类型(1:路由,2:外链,3:iframe)');
+                $table->tinyInteger('url_type')->default(1)->comment('导航类型(1:路由,2:外链,3:iframe)');
+                $table->string('url', 255)->nullable()->comment('访问url');
                 $table->tinyInteger('visible')->default(1)->comment('是否可见');
-                $table->string('is_home')->default(0)->comment('是否为首页');
+                $table->string('is_home')->default(0)->comment('是否首页');
                 $table->tinyInteger('keep_alive')->nullable()->comment('页面缓存');
-                $table->string('iframe_url', 255)->nullable()->index()->comment('iframe_url');
                 $table->string('component', 255)->nullable()->comment('菜单组件');
-                $table->string('is_full')->nullable()->comment('是否是完整页面');
+                $table->string('is_full')->nullable()->comment('是否页面');
                 $table->string('module', 32)->nullable()->index()->comment('模块');
                 $table->integer('mer_id')->nullable()->index()->comment('商户');
                 $table->timestamp('created_at')->nullable()->useCurrent();
                 $table->timestamp('updated_at')->nullable()->useCurrent();
-                //$table->timestamps();
+                // $table->timestamps();
             });
         }
     }
