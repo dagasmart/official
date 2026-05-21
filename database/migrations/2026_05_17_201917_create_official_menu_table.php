@@ -12,6 +12,7 @@ return new class extends Migration
     private string $table = 'official_menu';
 
     /**
+     * 执行迁移
      * Run the migrations.
      */
     public function up(): void
@@ -33,16 +34,17 @@ return new class extends Migration
                 $table->string('iframe_url', 255)->nullable()->index()->comment('iframe_url');
                 $table->string('component', 255)->nullable()->comment('菜单组件');
                 $table->string('is_full')->nullable()->comment('是否是完整页面');
-                $table->string('component')->nullable()->comment('商户');
                 $table->string('module', 32)->nullable()->index()->comment('模块');
                 $table->integer('mer_id')->nullable()->index()->comment('商户');
                 $table->timestamp('created_at')->nullable()->useCurrent();
                 $table->timestamp('updated_at')->nullable()->useCurrent();
+                //$table->timestamps();
             });
         }
     }
 
     /**
+     * 迁移回滚
      * Reverse the migrations.
      */
     public function down(): void
