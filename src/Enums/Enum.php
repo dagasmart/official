@@ -21,7 +21,7 @@ enum Enum
     /**
      * 是否类型
      *
-     * @return array|array[]
+     * @return array
      */
     public static function switch(): array
     {

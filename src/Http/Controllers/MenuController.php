@@ -112,14 +112,14 @@ class MenuController extends AdminController
     public function form($isEdit = false): Form
     {
         return $this->baseForm()->body([
-            amis()->SelectControl('parent_id', '父级菜单'),
+            amis()->SelectControl('parent_id', '父级菜单')->options($this->service->menus()),
             amis()->TextControl('title', '菜单标题')->required(),
             amis()->TextControl('icon', '图标')->hidden(),
             amis()->RadiosControl('url_type', '导航类型')->options(Enum::url_type())->value(1),
             amis()->TextControl('url', '${url_type === 1 ? "路由url" : (url_type === 2 ? "跳转url" : "iframe_url")}'),
-            amis()->SwitchControl('visible', '是否可见')->option(Enum::switch()),
-            amis()->SwitchControl('is_home', '是否首页')->option(Enum::switch()),
-            amis()->SwitchControl('is_full', '是否页面')->option(Enum::switch()),
+            amis()->SwitchControl('visible', '是否可见')->onText('是')->offText('否'),
+            amis()->SwitchControl('is_home', '是否首页')->onText('是')->offText('否'),
+            amis()->SwitchControl('is_full', '是否页面')->onText('是')->offText('否'),
         ]);
     }
 
@@ -135,9 +135,9 @@ class MenuController extends AdminController
                 ['value' => 3, 'label' => 'iframe'],
             ]),
             amis()->TextControl('url', '访问url'),
-            amis()->SwitchControl('visible', '是否可见')->option(Enum::switch()),
-            amis()->SwitchControl('is_home', '是否首页')->option(Enum::switch()),
-            amis()->SwitchControl('is_full', '是否页面')->option(Enum::switch()),
+            amis()->SwitchControl('visible', '是否可见')->onText('是')->offText('否'),
+            amis()->SwitchControl('is_home', '是否首页')->onText('是')->offText('否'),
+            amis()->SwitchControl('is_full', '是否页面')->onText('是')->offText('否'),
         ])->static();
     }
 }
