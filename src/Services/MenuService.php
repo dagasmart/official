@@ -18,7 +18,7 @@ class MenuService  extends AdminService
     public function menus(): array
     {
         $rows = $this->query()
-            ->select('id2', 'title as label', 'id as value', 'parent_id')
+            ->select('id', 'title as label', 'id as value', 'parent_id')
             ->get()
             ->toArray();
         return array2tree($rows);
