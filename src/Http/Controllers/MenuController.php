@@ -6,6 +6,7 @@ use DagaSmart\BizAdmin\Renderers\Form;
 use DagaSmart\BizAdmin\Renderers\Page;
 use DagaSmart\Official\Enums\Enum;
 use DagaSmart\Official\Services\MenuService;
+use Illuminate\Http\Request;
 
 class MenuController extends AdminController
 {
@@ -37,6 +38,9 @@ class MenuController extends AdminController
                         'type' => 'input-text',
                         'placeholder' => '请输入父级菜单',
                     ])
+                    ->set('type', 'input-tag')
+                    ->set('options', $this->service->menuAll())
+                    ->set('static', true)
                     ->width(150),
                 amis()->TableColumn('url_type', '导航类型')
                     ->searchable([
@@ -112,7 +116,9 @@ class MenuController extends AdminController
     public function form($isEdit = false): Form
     {
         return $this->baseForm()->body([
-            amis()->SelectControl('parent_id', '父级菜单')->options($this->service->menus()),
+            amis()->TreeSelectControl('parent_id', '父级菜单')
+                ->source('official/site/menu/${id||0}/all')
+                ->options($this->service->menuAll()),
             amis()->TextControl('title', '菜单标题')->required(),
             amis()->TextControl('icon', '图标')->hidden(),
             amis()->RadiosControl('url_type', '导航类型')->options(Enum::url_type())->value(1),
@@ -140,4 +146,12 @@ class MenuController extends AdminController
             amis()->SwitchControl('is_full', '是否页面')->onText('是')->offText('否')->disabled()->static(false),
         ])->static();
     }
+
+    public function menuAll(Request $request)
+    {
+        $id = $request->id ?? null;
+        return $this->service->menuAll($id);
+    }
+
+
 }

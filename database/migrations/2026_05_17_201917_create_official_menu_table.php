@@ -22,7 +22,7 @@ return new class extends Migration
             Schema::create($this->table, function (Blueprint $table) {
                 $table->comment('官网菜单表');
                 $table->id();
-                $table->integer('parent_id')->default(0)->index()->comment('父级ID');
+                $table->integer('parent_id')->nullable()->index()->comment('父级ID');
                 $table->tinyInteger('custom_order')->default(10)->comment('排序[0-255]');
                 $table->string('title', 32)->nullable()->comment('菜单名称');
                 $table->string('icon', 100)->nullable()->comment('菜单图标');
@@ -32,7 +32,7 @@ return new class extends Migration
                 $table->string('is_home')->default(0)->comment('是否首页');
                 $table->tinyInteger('keep_alive')->nullable()->comment('页面缓存');
                 $table->string('component', 255)->nullable()->comment('菜单组件');
-                $table->string('is_full')->nullable()->comment('是否页面');
+                $table->string('is_full')->default(0)->comment('是否页面');
                 $table->string('module', 32)->nullable()->index()->comment('模块');
                 $table->integer('mer_id')->nullable()->index()->comment('商户');
                 $table->timestamp('created_at')->nullable()->useCurrent();
