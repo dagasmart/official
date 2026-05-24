@@ -30,7 +30,7 @@ class MenuController extends AdminController
                 amis()->TableColumn('id', 'ID')
                     ->sortable()
                     ->set('fixed', 'left'),
-                amis()->TableColumn('title', '菜单名称')->width(200),
+                amis()->TableColumn('title', '菜单名称')->set('fixed', 'left')->width(200),
                 amis()->TableColumn('parent_id', '父级菜单')
                     ->searchable([
                         'name' => 'parent_id',
@@ -135,9 +135,9 @@ class MenuController extends AdminController
                 ['value' => 3, 'label' => 'iframe'],
             ]),
             amis()->TextControl('url', '访问url'),
-            amis()->SwitchControl('visible', '是否可见')->onText('是')->offText('否'),
-            amis()->SwitchControl('is_home', '是否首页')->onText('是')->offText('否'),
-            amis()->SwitchControl('is_full', '是否页面')->onText('是')->offText('否'),
+            amis()->SwitchControl('visible', '是否可见')->onText('是')->offText('否')->disabled()->static(false),
+            amis()->SwitchControl('is_home', '是否首页')->onText('是')->offText('否')->disabled()->static(false),
+            amis()->SwitchControl('is_full', '是否页面')->onText('是')->offText('否')->disabled()->static(false),
         ])->static();
     }
 }
