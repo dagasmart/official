@@ -37,7 +37,7 @@ class OfficialServiceProvider extends ServiceProvider
             'title' => '导航菜单',
             'url' => '/official/site/menu',
             'url_type' => 1,
-            'icon' => 'bi:menu-button-wide-fill',
+            'icon' => 'line-md:menu-unfold-left',
         ],
         [
             'parent' => '站点管理',

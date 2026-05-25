@@ -4,7 +4,6 @@ namespace DagaSmart\Official\Services;
 
 use DagaSmart\Official\Models\Menu;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
 
 /**
  * 导航菜单-服务类
@@ -12,7 +11,7 @@ use Illuminate\Http\Request;
  * @method Menu getModel()
  * @method Menu|Builder query()
  */
-class MenuService  extends AdminService
+class MenuService extends AdminService
 {
     protected string $modelName = Menu::class;
 
@@ -27,8 +26,8 @@ class MenuService  extends AdminService
         $url = request('url');
 
         $list = $this->query()
-            ->when($title, fn($query) => $query->where('title', 'like', '%' . $title . '%'))
-            ->when($url, fn($query) => $query->where('url', 'like', '%' . $url . '%'))
+            ->when($title, fn ($query) => $query->where('title', 'like', '%'.$title.'%'))
+            ->when($url, fn ($query) => $query->where('url', 'like', '%'.$url.'%'))
             ->orderBy('custom_order')
             ->orderBy('id')
             ->get()
@@ -46,10 +45,7 @@ class MenuService  extends AdminService
             })
             ->get()
             ->toArray();
+
         return array2tree($rows);
     }
-
-
-
-
 }
