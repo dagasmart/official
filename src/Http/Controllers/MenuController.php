@@ -31,22 +31,31 @@ class MenuController extends AdminController
                 amis()->TableColumn('id', 'ID')
                     ->sortable()
                     ->set('fixed', 'left'),
-                amis()->TableColumn('title', '菜单名称')->set('fixed', 'left')->width(200),
+                amis()->TableColumn('title', '菜单名称')
+                    ->searchable([
+                        'name' => 'title',
+                        'type' => 'input-text',
+                        'placeholder' => '请输入查找的菜单标题',
+                    ])
+                    ->set('fixed', 'left')
+                    ->width(100),
                 amis()->TableColumn('parent_id', '父级菜单')
                     ->searchable([
                         'name' => 'parent_id',
-                        'type' => 'input-text',
+                        'type' => 'tree-select',
                         'placeholder' => '请输入父级菜单',
+                        'options' => $this->service->menuAll(),
                     ])
                     ->set('type', 'input-tag')
                     ->set('options', $this->service->menuAll())
+                    ->set('labelField', 'level_name')
                     ->set('static', true)
                     ->width(150),
                 amis()->TableColumn('url_type', '导航类型')
                     ->searchable([
                         'name' => 'url_type',
                         'type' => 'select',
-                        'multiple' => false,
+                        'multiple' => true,
                         'searchable' => false,
                         'options' => Enum::url_type(),
                     ])
@@ -58,8 +67,10 @@ class MenuController extends AdminController
                 amis()->TableColumn('visible', '是否可见')
                     ->searchable([
                         'name' => 'visible',
-                        'type' => 'select',
+                        'type' => 'checkboxes',
                         'options' => Enum::switch(),
+                        'clearable' => true,
+                        'multiple' => true,
                     ])
                     ->set('type', 'switch')
                     ->set('onText', '是')
@@ -69,8 +80,10 @@ class MenuController extends AdminController
                 amis()->TableColumn('is_home', '是否首页')
                     ->searchable([
                         'name' => 'is_home',
-                        'type' => 'select',
+                        'type' => 'checkboxes',
                         'options' => Enum::switch(),
+                        'clearable' => true,
+                        'multiple' => true,
                     ])
                     ->set('type', 'switch')
                     ->set('onText', '是')
@@ -80,8 +93,10 @@ class MenuController extends AdminController
                 amis()->TableColumn('is_full', '是否页面')
                     ->searchable([
                         'name' => 'is_full',
-                        'type' => 'select',
+                        'type' => 'checkboxes',
                         'options' => Enum::switch(),
+                        'clearable' => true,
+                        'multiple' => true,
                     ])
                     ->set('type', 'switch')
                     ->set('onText', '是')
@@ -119,9 +134,9 @@ class MenuController extends AdminController
             amis()->TreeSelectControl('parent_id', '父级菜单')
                 ->source('official/site/menu/${id||0}/all')
                 ->options($this->service->menuAll()),
-            amis()->TextControl('title', '菜单标题')->required(),
+            amis()->TextControl('title', '菜单标题')->clearable()->required(),
             amis()->TextControl('icon', '图标')->hidden(),
-            amis()->RadiosControl('url_type', '导航类型')->options(Enum::url_type())->value(1),
+            amis()->RadiosControl('url_type', '导航类型')->clearable()->options(Enum::url_type())->value(1),
             amis()->TextControl('url', '${url_type === 1 ? "路由url" : (url_type === 2 ? "跳转url" : "iframe_url")}'),
             amis()->SwitchControl('visible', '是否可见')->onText('是')->offText('否'),
             amis()->SwitchControl('is_home', '是否首页')->onText('是')->offText('否'),
@@ -150,8 +165,7 @@ class MenuController extends AdminController
     public function menuAll(Request $request)
     {
         $id = $request->id ?? null;
+
         return $this->service->menuAll($id);
     }
-
-
 }

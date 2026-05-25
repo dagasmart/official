@@ -1,21 +1,19 @@
 <?php
+
 namespace DagaSmart\Official\Models;
 
 use DagaSmart\BizAdmin\Models\BaseModel;
-use DagaSmart\BizAdmin\Scopes\ActiveScope;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  *基座模型
  */
 class Model extends BaseModel
 {
-
-    const ?string schema = null; //null或空值为默认数据库
+    const ?string schema = null; // null或空值为默认数据库
 
     public function __construct()
     {
-        if (!empty(self::schema)) {
+        if (! empty(self::schema)) {
             $this->setConnection(self::schema);
         }
         parent::__construct();
@@ -25,5 +23,4 @@ class Model extends BaseModel
     {
         parent::booted();
     }
-
 }
