@@ -29,24 +29,23 @@ class MenuService extends AdminService
         $is_full = request('is_full');
 
         $parent_id = request('parent_id');
-        $ids = $this->query()->find($parent_id, ['id'])?->descendantsAndSelf->pluck('id');
+        $ids = $this->query()->find($parent_id, ['id'])->pluck('id');
 
         $list = $this->query()
-            ->tree()
             ->when($title, fn ($query) => $query->where('title', 'like', '%'.$title.'%'))
             ->when($url_type, fn ($query) => $query->whereIn('url_type', explode(',', $url_type)))
             ->when(! is_null($visible), fn ($query) => $query->whereIn('visible', explode(',', $visible)))
             ->when(! is_null($is_home), fn ($query) => $query->whereIn('is_home', explode(',', $is_home)))
             ->when(! is_null($is_full), fn ($query) => $query->whereIn('is_full', explode(',', $is_full)))
-            ->when($parent_id, function (Builder $query) use ($ids) {
+            ->when($ids, function (Builder $query) use ($ids) {
                 $query->whereIn('id', $ids);
             })
             ->orderBy('custom_order')
             ->orderBy('id')
             ->get()
-            ->toTree();
+            ?->toArray();
 
-        return $list->loadTreeRelationships()->toArray();
+        return array2tree($list);
     }
 
     public function menuAll($id = null): array

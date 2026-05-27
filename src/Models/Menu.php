@@ -2,11 +2,12 @@
 
 namespace DagaSmart\Official\Models;
 
-use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+
+use DagaSmart\Nestedset\NodeTrait;
 
 class Menu extends Model
 {
-    use HasRecursiveRelationships;
+    use NodeTrait;
 
     protected $table = 'official_menu';
 
