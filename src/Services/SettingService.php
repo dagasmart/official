@@ -2,15 +2,19 @@
 
 namespace DagaSmart\Official\Services;
 
+use ArrayAccess;
 use DagaSmart\Official\Models\Setting;
 use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 
 class SettingService extends AdminService
 {
     protected string $modelName = Setting::class;
 
-    protected string $cacheKeyPrefix = 'official_setting_';
+    protected string $cacheKeyPrefix = ':official_setting:';
 
     /**
      * 保存设置
@@ -23,7 +27,7 @@ class SettingService extends AdminService
     public function set(string $key, mixed $value = null): bool
     {
         try {
-            $setting = $this->getModel()->Authority()->firstOrNew(['key' => $key]);
+            $setting = $this->getModel()->query()->firstOrNew(['key' => $key]);
 
             $setting->values = $value;
             $this->clearCache($key);
@@ -61,9 +65,10 @@ class SettingService extends AdminService
      *
      * @param array $data
      *
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Resources\Json\JsonResource
+     * @return JsonResponse|JsonResource
+     * @throws Exception
      */
-    public function adminSetMany(array $data)
+    public function adminSetMany(array $data): JsonResponse|JsonResource
     {
         $prefix = admin_trans('admin.save');
 
@@ -79,9 +84,9 @@ class SettingService extends AdminService
      *
      * @return array
      */
-    public function all()
+    public function all(): array
     {
-        return $this->getModel()->Authority()
+        return $this->getModel()->query()
             ->pluck('values', 'key')
             ->toArray();
     }
@@ -95,17 +100,15 @@ class SettingService extends AdminService
      *
      * @return mixed|null
      */
-    public function get(string $key, mixed $default = null, bool $fresh = false)
+    public function get(string $key, mixed $default = null, bool $fresh = false): mixed
     {
         if ($fresh) {
-            return $this->getModel()->Authority()->where('key', $key)->value('values') ?? $default;
+            return $this->getModel()->query()->where('key', $key)->value('values') ?? $default;
         }
 
-        $cache = Cache::rememberForever($this->getCacheKey($key), function () use ($key, $default) {
-            return $this->getModel()->Authority()->where('key', $key)->value('values') ?? $default;
+        return Cache::rememberForever($this->getCacheKey($key), function () use ($key, $default) {
+            return $this->getModel()->query()->where('key', $key)->value('values') ?? $default;
         });
-
-        return $cache;
     }
 
     /**
@@ -117,7 +120,7 @@ class SettingService extends AdminService
      *
      * @return mixed|null
      */
-    public function getByModule(string $key, mixed $default = null, bool $fresh = false)
+    public function getByModule(string $key, mixed $default = null, bool $fresh = false): mixed
     {
         $cacheKey = $this->getCacheKey($key);
 
@@ -127,14 +130,14 @@ class SettingService extends AdminService
 
             $cacheKey .= '_' . $user_id;
         }
-        $res = $this->getModel()->Authority()->where('key', $key)->value('values');
+        $res = $this->getModel()->query()->where('key', $key)->value('values');
         // 直接读库数据
         if ($fresh) {
-            return $this->getModel()->Authority()->where('key', $key)->value('values') ?? $default;
+            return $this->getModel()->query()->where('key', $key)->value('values') ?? $default;
         }
         // 先从缓存获取，没有时，直接读库数据
         return Cache::rememberForever($cacheKey, function () use ($key, $default) {
-            return $this->getModel()->Authority()->where('key', $key)->value('values') ?? $default;
+            return $this->getModel()->query()->where('key', $key)->value('values') ?? $default;
         });
     }
 
@@ -147,7 +150,7 @@ class SettingService extends AdminService
      *
      * @return mixed|null
      */
-    public function getByModuleMerchant(string $key, mixed $default = null, bool $fresh = false)
+    public function getByModuleMerchant(string $key, mixed $default = null, bool $fresh = false): mixed
     {
         return $this->get($this->getCacheKey($key), $default, $fresh);
     }
@@ -161,10 +164,10 @@ class SettingService extends AdminService
      *
      * @return mixed|null
      */
-    public function pay(string $key, bool $is_plat = false, bool $fresh = false)
+    public function pay(string $key, bool $is_plat = false, bool $fresh = false): mixed
     {
         //排除全局条件
-        $model = $this->getModel()->withOutGlobalScope('ActionScope');
+        $model = $this->getModel()->query()->withOutGlobalScope('ActionScope');
         //排除全局条件
         if ($is_plat) {
             $model->withOutGlobalScope('ActionScope');
@@ -174,10 +177,9 @@ class SettingService extends AdminService
             return $model->where('key', $key)->value('values') ?? null;
         }
         //获取表数据并缓存
-        $cache = Cache::rememberForever($this->getCacheKey($key), function () use ($key, $model) {
+        return Cache::rememberForever($this->getCacheKey($key), function () use ($key, $model) {
             return $model->where('key', $key)->value('values') ?? null;
         });
-        return $cache;
     }
 
     /**
@@ -187,9 +189,9 @@ class SettingService extends AdminService
      * @param string $path 通过点号分隔的路径, 同Arr::get()
      * @param        $default
      *
-     * @return array|\ArrayAccess|mixed|null
+     * @return array|ArrayAccess|mixed|null
      */
-    public function arrayGet(string $key, string $path, $default = null)
+    public function arrayGet(string $key, string $path, $default = null): mixed
     {
         $value = $this->get($key);
 
@@ -207,9 +209,9 @@ class SettingService extends AdminService
      *
      * @return bool
      */
-    public function del(string $key)
+    public function del(string $key): bool
     {
-        if ($this->getModel()->Authority()->where('key', $key)->delete()) {
+        if ($this->getModel()->query()->where('key', $key)->delete()) {
             $this->clearCache($key);
             return true;
         }
@@ -225,7 +227,7 @@ class SettingService extends AdminService
      *
      * @return void
      */
-    public function clearUserCache($key)
+    public function clearUserCache($key): void
     {
         Cache::forget($this->cacheKeyPrefix . $key);
     }
@@ -237,7 +239,7 @@ class SettingService extends AdminService
      *
      * @return void
      */
-    public function clearCache($key)
+    public function clearCache($key): void
     {
         Cache::forget($this->getCacheKey($key));
     }
