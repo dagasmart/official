@@ -4,21 +4,17 @@
 
 use DagaSmart\Official\Services\SettingService;
 
-if (!function_exists('test')) {
-    /**
-     * @return bool
-     */
+if (! function_exists('test')) {
     function test(): bool
     {
         return true;
     }
 
-    if (!function_exists('settings')) {
+    if (! function_exists('settings')) {
         function settings(): SettingService
         {
             return SettingService::make();
         }
     }
-
 
 }
