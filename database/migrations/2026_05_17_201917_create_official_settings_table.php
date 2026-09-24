@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
-    protected $connection = null;
-    private string $table = 'official_settings';
+    protected $connection = 'master';
+    private string $table = 'mcs_official_settings';
 
     /**
      * 执行迁移

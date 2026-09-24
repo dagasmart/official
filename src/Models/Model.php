@@ -1,5 +1,4 @@
 <?php
-
 namespace DagaSmart\Official\Models;
 
 use DagaSmart\BizAdmin\Models\BaseModel;
@@ -9,7 +8,7 @@ use DagaSmart\BizAdmin\Models\BaseModel;
  */
 class Model extends BaseModel
 {
-    const ?string schema = null; // null或空值为默认数据库
+    const ?string schema = 'master'; // 空值默认数据库
 
     public function __construct()
     {

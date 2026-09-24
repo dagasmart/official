@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    protected $connection = null;
+    protected $connection = 'master';
 
-    private string $table = 'official_menu';
+    private string $table = 'mcs_official_menu';
 
     /**
      * 执行迁移
