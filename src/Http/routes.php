@@ -1,14 +1,13 @@
 <?php
 
+use DagaSmart\BizAdmin\Middleware\Authenticate;
+use DagaSmart\BizAdmin\Middleware\Permission;
 use DagaSmart\Official\Http\Controllers;
 use DagaSmart\Official\Http\Middleware;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Routing\Router;
-use DagaSmart\BizAdmin\Middleware\Permission;
-use DagaSmart\BizAdmin\Middleware\Authenticate;
+use Illuminate\Support\Facades\Route;
 
-
-//需登录与鉴权
+// 需登录与鉴权
 Route::group([
     'prefix' => 'extension', // 选填，扩展路由
     'middleware' => [
@@ -22,5 +21,5 @@ Route::group([
     // $router->resource('official', Controllers\OfficialController::class);
 });
 
-//免登录无限制
-//Route::get('official', [Controllers\OfficialController::class, 'index'])->withoutMiddleware([Authenticate::class, Permission::class]);
+// 免登录无限制
+// Route::get('official', [Controllers\OfficialController::class, 'index'])->withoutMiddleware([Authenticate::class, Permission::class]);
