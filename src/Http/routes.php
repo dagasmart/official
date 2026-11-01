@@ -14,11 +14,17 @@ Route::group([
         Middleware\Middleware::class,
     ],
 ], function (Router $router) {
-    $router->get('official', [Controllers\OfficialController::class, 'index']);
 
-    $router->resource('official/contact', Controllers\ContactController::class);
-    // resource必须放最后面 (重点)
-    // $router->resource('official', Controllers\OfficialController::class);
+    $router->group([
+        'prefix' => 'official',
+    ], function (Router $router) {
+
+        $router->get('official', [Controllers\OfficialController::class, 'index']);
+
+        // resource必须放最后面 (重点)
+        $router->resource('official/contact', Controllers\ContactController::class);
+    });
+
 });
 
 // 免登录无限制
